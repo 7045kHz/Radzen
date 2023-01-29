@@ -1,0 +1,38 @@
+@page "/fetchdata"
+@using DasboardUI.Data
+@inject WeatherForecastService ForecastService
+
+<PageTitle>Weather forecast</PageTitle>
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+
+<RadzenDataGrid Data="@customers" TItem="WeatherForecast" 
+    AllowSorting="true" 
+    AllowMultiColumnSorting="true" 
+    AllowPaging="true" PageSize="3"
+    AllowFiltering="true" 
+    FilterMode="FilterMode.Advanced" 
+    LogicalFilterOperator="LogicalFilterOperator.Or">
+    <Columns>
+        <RadzenDataGridColumn TItem="WeatherForecast" Property="Date" Title="Date" />
+        <RadzenDataGridColumn TItem="WeatherForecast" Property="TemperatureC" Title="C" />
+        <RadzenDataGridColumn TItem="WeatherForecast" Property="TemperatureF" Title="F" />
+    </Columns>
+</RadzenDataGrid>
+
+
+
+
+@code {
+    private WeatherForecast[]? forecasts;
+    IEnumerable<WeatherForecast> customers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await ForecastService.GetForecastAsync(DateOnly.FromDateTime(DateTime.Now));
+        customers = forecasts.ToList();
+    }
+}
